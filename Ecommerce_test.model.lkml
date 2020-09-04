@@ -2,6 +2,7 @@ connection: "snowlooker"
 
 # include all the views
 include: "/views/**/*.view"
+label: "Advanced LookML ECommerce"
 
 datagroup: marco_test2_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;

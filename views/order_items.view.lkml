@@ -1,12 +1,25 @@
 view: order_items {
-  sql_table_name: "PUBLIC"."ORDER_ITEMS"
-    ;;
-  drill_fields: [id]
+  sql_table_name: public.order_items;;
 
   dimension: id {
     primary_key: yes
     type: number
-    sql: ${TABLE}."ID" ;;
+    sql: ${TABLE}.id ;;
+    value_format_name: id
+  }
+
+  dimension: inventory_item_id {
+    type: number
+    hidden: yes
+    sql: ${TABLE}."INVENTORY_ITEM_ID" ;;
+    value_format_name: id
+  }
+
+  dimension: order_id {
+    type: number
+    hidden: yes
+    sql: ${TABLE}."ORDER_ID" ;;
+    value_format_name: id
   }
 
   dimension_group: created {
@@ -23,6 +36,20 @@ view: order_items {
     sql: ${TABLE}."CREATED_AT" ;;
   }
 
+  dimension_group: shipped {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SHIPPED_AT" ;;
+  }
+
   dimension_group: delivered {
     type: time
     timeframes: [
@@ -35,17 +62,6 @@ view: order_items {
       year
     ]
     sql: ${TABLE}."DELIVERED_AT" ;;
-  }
-
-  dimension: inventory_item_id {
-    type: number
-    # hidden: yes
-    sql: ${TABLE}."INVENTORY_ITEM_ID" ;;
-  }
-
-  dimension: order_id {
-    type: number
-    sql: ${TABLE}."ORDER_ID" ;;
   }
 
   dimension_group: returned {
@@ -86,26 +102,6 @@ view: order_items {
     }
   }
 
-  dimension: cost {
-    type: number
-    sql: ${TABLE}.cost ;;
-    value_format: "$0.00"
-  }
-
-  dimension_group: shipped {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}."SHIPPED_AT" ;;
-  }
-
   dimension: status {
     type: string
     sql: ${TABLE}."STATUS" ;;
@@ -125,21 +121,29 @@ view: order_items {
   measure: total_sale_price {
     type: sum
     sql: ${sale_price} ;;
+    value_format_name: usd
+    group_label: "Sale Price"
   }
 
   measure: average_sale_price {
     type: average
     sql: ${sale_price} ;;
+    value_format_name: usd
+    group_label: "Sale Price"
   }
 
   measure: least_expensive_item {
     type: min
     sql: ${sale_price} ;;
+    value_format_name: usd
+    group_label: "Sale Price"
   }
 
   measure: most_expensive_item {
     type: max
     sql: ${sale_price} ;;
+    value_format_name: usd
+    group_label: "Sale Price"
   }
 
   measure: total_profit{
